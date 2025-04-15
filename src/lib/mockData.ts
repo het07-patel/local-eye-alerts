@@ -1,5 +1,4 @@
-
-import { Problem, Category } from "./types";
+import { Problem, Category, Update } from "./types";
 
 export const categories: Category[] = [
   { id: "1", name: "Road Issue", icon: "road" },
@@ -96,7 +95,6 @@ export const mockProblems: Problem[] = [
   },
 ];
 
-// Mock service functions
 let problems = [...mockProblems];
 
 export const getProblems = () => {
