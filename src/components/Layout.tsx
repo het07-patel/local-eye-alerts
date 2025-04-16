@@ -11,7 +11,7 @@ const Layout = () => {
     // Welcome toast for first-time visitors
     if (!localStorage.getItem("welcomed")) {
       toast({
-        title: "Welcome to Local Eye",
+        title: "Welcome to StreetSense",
         description: "Report and track local problems in your community.",
         duration: 5000,
       });
@@ -27,7 +27,7 @@ const Layout = () => {
       </main>
       <footer className="bg-muted py-6">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2025 Local Eye. Making communities better together.</p>
+          <p>© 2025 StreetSense. Making communities better together.</p>
         </div>
       </footer>
     </div>

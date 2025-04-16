@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
             <MapPin className="h-6 w-6" />
-            <span className="font-bold text-xl">Surat Local Eye</span>
+            <span className="font-bold text-xl">StreetSense</span>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-4">
