@@ -10,7 +10,6 @@ import ReportProblemPage from "./pages/ReportProblemPage";
 import ProblemDetailsPage from "./pages/ProblemDetailsPage";
 import LocalAlertsPage from "./pages/LocalAlertsPage";
 import AuthPage from "./pages/AuthPage";
-import HelpPage from "./pages/HelpPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,7 +27,6 @@ const App = () => (
             <Route path="problem/:id" element={<ProblemDetailsPage />} />
             <Route path="alerts" element={<LocalAlertsPage />} />
             <Route path="auth" element={<AuthPage />} />
-            <Route path="help" element={<HelpPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
