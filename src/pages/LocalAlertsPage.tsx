@@ -16,8 +16,8 @@ const LocalAlertsPage = () => {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all-categories");
+  const [statusFilter, setStatusFilter] = useState("all-statuses");
   const [userLocation, setUserLocation] = useState({ lat: 40.7128, lng: -74.006 });
 
   useEffect(() => {
@@ -66,10 +66,10 @@ const LocalAlertsPage = () => {
       : true;
 
     // Apply category filter
-    const matchesCategory = categoryFilter ? problem.category === categoryFilter : true;
+    const matchesCategory = categoryFilter === "all-categories" ? true : problem.category === categoryFilter;
 
     // Apply status filter
-    const matchesStatus = statusFilter ? problem.status === statusFilter : true;
+    const matchesStatus = statusFilter === "all-statuses" ? true : problem.status === statusFilter;
 
     return matchesSearch && matchesCategory && matchesStatus;
   });
