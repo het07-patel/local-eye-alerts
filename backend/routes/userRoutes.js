@@ -6,6 +6,7 @@ const User = require('../models/User');
 const OTP = require('../models/OTP');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
+const { sendOtpEmail } = require('../utils/email');
 
 // Generate 6-digit OTP
 const generateOTP = () => {
@@ -29,6 +30,9 @@ router.post('/register/send-otp', async (req, res) => {
     // Save OTP to database (overwrite if exists)
     await OTP.findOneAndDelete({ email });
     await new OTP({ email, otp }).save();
+    
+    // Send OTP via email
+    await sendOtpEmail(email, otp);
     
     res.status(200).json({ message: 'OTP sent successfully', email });
   } catch (err) {

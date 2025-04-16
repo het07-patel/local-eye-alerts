@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const problemRoutes = require('./routes/problemRoutes');
 const userRoutes = require('./routes/userRoutes');
+const searchRoutes = require('./routes/searchRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +26,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Routes
 app.use('/api/problems', problemRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/search', searchRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
