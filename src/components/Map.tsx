@@ -30,10 +30,19 @@ const createCustomIcon = (color: string) => {
   });
 };
 
+// Surat coordinates
+const SURAT_COORDINATES = { lat: 21.1702, lng: 72.8311 };
+
 const reportedIcon = createCustomIcon("#eab308"); // yellow-500
 const inProgressIcon = createCustomIcon("#3b82f6"); // blue-500
 const resolvedIcon = createCustomIcon("#22c55e"); // green-500
 const selectedIcon = createCustomIcon("#ef4444"); // red-500
+
+// Category-specific icons
+const roadIcon = createCustomIcon("#9333ea"); // purple-600
+const wasteIcon = createCustomIcon("#f97316"); // orange-500
+const waterIcon = createCustomIcon("#0ea5e9"); // sky-500
+const infrastructureIcon = createCustomIcon("#84cc16"); // lime-500
 
 interface MapProps {
   problems?: Problem[];
@@ -41,6 +50,7 @@ interface MapProps {
   zoom?: number;
   onMapClick?: (lat: number, lng: number) => void;
   selectedLocation?: { lat: number; lng: number } | null;
+  showCategoryMarkers?: boolean;
 }
 
 // Component to handle map events
@@ -66,14 +76,33 @@ const MapEvents = ({ onMapClick }: { onMapClick?: (lat: number, lng: number) => 
 
 const Map = ({ 
   problems = [], 
-  center = { lat: 40.7128, lng: -74.006 }, 
+  center = SURAT_COORDINATES, 
   zoom = 12,
   onMapClick,
-  selectedLocation
+  selectedLocation,
+  showCategoryMarkers = false
 }: MapProps) => {
   const mapRef = useRef<L.Map | null>(null);
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string, category?: string) => {
+    // If showing category markers and category is provided
+    if (showCategoryMarkers && category) {
+      switch (category) {
+        case "1": // Road Issue
+          return roadIcon;
+        case "2": // Trash/Garbage
+          return wasteIcon;
+        case "5": // Water Issue
+          return waterIcon;
+        case "3": // Infrastructure
+        case "4": // Infrastructure
+          return infrastructureIcon;
+        default:
+          break;
+      }
+    }
+    
+    // Default to status-based icons
     switch (status) {
       case "reported":
         return reportedIcon;
@@ -106,7 +135,7 @@ const Map = ({
           <Marker 
             key={problem.id} 
             position={[problem.location.lat, problem.location.lng]}
-            icon={getStatusIcon(problem.status)}
+            icon={getStatusIcon(problem.status, problem.category)}
           >
             <Popup>
               <div className="p-1">

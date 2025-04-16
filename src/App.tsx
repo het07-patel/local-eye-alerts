@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import ReportProblemPage from "./pages/ReportProblemPage";
 import ProblemDetailsPage from "./pages/ProblemDetailsPage";
 import LocalAlertsPage from "./pages/LocalAlertsPage";
+import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="report" element={<ReportProblemPage />} />
             <Route path="problem/:id" element={<ProblemDetailsPage />} />
             <Route path="alerts" element={<LocalAlertsPage />} />
+            <Route path="auth" element={<AuthPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -4,16 +4,24 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, AlertTriangle, Plus } from "lucide-react";
+import { MapPin, Clock, AlertTriangle, Plus, Building, Droplet, Road, Trash2 } from "lucide-react";
 import { Problem } from "@/lib/types";
 import { getProblems } from "@/lib/mockData";
 import Map from "@/components/Map";
 
+// Surat coordinates
+const SURAT_COORDINATES = { lat: 21.1702, lng: 72.8311 };
+
 const HomePage = () => {
   const [recentProblems, setRecentProblems] = useState<Problem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Check if user is logged in
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+
     const fetchProblems = async () => {
       try {
         const problems = await getProblems();
@@ -54,20 +62,45 @@ const HomePage = () => {
     });
   };
 
+  const getCategoryIcon = (categoryId: string) => {
+    switch (categoryId) {
+      case "1":
+        return <Road className="h-4 w-4 mr-2" />;
+      case "2":
+        return <Trash2 className="h-4 w-4 mr-2" />;
+      case "3":
+        return <Building className="h-4 w-4 mr-2" />;
+      case "4":
+        return <Building className="h-4 w-4 mr-2" />;
+      case "5":
+        return <Droplet className="h-4 w-4 mr-2" />;
+      default:
+        return <MapPin className="h-4 w-4 mr-2" />;
+    }
+  };
+
   return (
     <div className="space-y-8">
       <section className="text-center py-10 bg-gradient-to-b from-primary/20 to-transparent rounded-lg">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Local Eye</h1>
+        <h1 className="text-4xl font-bold mb-4">Surat Local Eye</h1>
         <p className="text-xl max-w-2xl mx-auto mb-6">
-          Report and track local problems in your community. Together we can make our neighborhoods better.
+          Report and track local issues in Surat. Together we can make our city better.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild size="lg">
-            <Link to="/report" className="flex items-center gap-2">
-              <Plus size={20} />
-              Report a Problem
-            </Link>
-          </Button>
+          {isLoggedIn ? (
+            <Button asChild size="lg">
+              <Link to="/report" className="flex items-center gap-2">
+                <Plus size={20} />
+                Report a Problem
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild size="lg">
+              <Link to="/auth" className="flex items-center gap-2">
+                Sign In to Report Issues
+              </Link>
+            </Button>
+          )}
           <Button asChild variant="outline" size="lg">
             <Link to="/alerts">View Local Alerts</Link>
           </Button>
@@ -77,7 +110,7 @@ const HomePage = () => {
       <div className="grid md:grid-cols-2 gap-8">
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Recent Reports</h2>
+            <h2 className="text-2xl font-bold">Recent Reports in Surat</h2>
             <Link to="/alerts" className="text-primary hover:underline">
               View all
             </Link>
@@ -99,8 +132,11 @@ const HomePage = () => {
                       </Badge>
                     </div>
                     <CardDescription className="flex items-center gap-1">
-                      <MapPin className="h-3 w-3" />
-                      {problem.location.address}
+                      <div className="flex items-center">
+                        {getCategoryIcon(problem.category)}
+                        <MapPin className="h-3 w-3 mr-1" />
+                        {problem.location.address}
+                      </div>
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pb-2">
@@ -124,11 +160,17 @@ const HomePage = () => {
                     <AlertTriangle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
                     <p className="text-lg font-medium">No problems reported yet</p>
                     <p className="text-muted-foreground mb-4">
-                      Be the first to report a problem in your area
+                      Be the first to report a problem in Surat
                     </p>
-                    <Button asChild>
-                      <Link to="/report">Report a Problem</Link>
-                    </Button>
+                    {isLoggedIn ? (
+                      <Button asChild>
+                        <Link to="/report">Report a Problem</Link>
+                      </Button>
+                    ) : (
+                      <Button asChild>
+                        <Link to="/auth">Sign In to Report</Link>
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
               )}
@@ -137,9 +179,14 @@ const HomePage = () => {
         </section>
         
         <section>
-          <h2 className="text-2xl font-bold mb-4">Problem Map</h2>
+          <h2 className="text-2xl font-bold mb-4">Surat City Map</h2>
           <div className="h-[500px] rounded-lg overflow-hidden border">
-            <Map problems={recentProblems} />
+            <Map 
+              problems={recentProblems} 
+              center={SURAT_COORDINATES}
+              zoom={13}
+              showCategoryMarkers={true}
+            />
           </div>
         </section>
       </div>

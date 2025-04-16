@@ -1,16 +1,44 @@
 
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bell, FileText, Home } from "lucide-react";
+import { MapPin, Bell, FileText, Home, LogIn, LogOut, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+
+    if (loggedIn) {
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUser(null);
+    toast.success("Successfully logged out!");
+    navigate("/");
+  };
+
   return (
     <header className="bg-primary text-primary-foreground shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
             <MapPin className="h-6 w-6" />
-            <span className="font-bold text-xl">Local Eye</span>
+            <span className="font-bold text-xl">Surat Local Eye</span>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-4">
@@ -20,18 +48,44 @@ const Navbar = () => {
                 <span>Home</span>
               </Link>
             </Button>
-            <Button asChild variant="ghost">
-              <Link to="/report" className="flex items-center space-x-2">
-                <FileText className="h-4 w-4" />
-                <span>Report Problem</span>
-              </Link>
-            </Button>
+            
+            {isLoggedIn && (
+              <Button asChild variant="ghost">
+                <Link to="/report" className="flex items-center space-x-2">
+                  <FileText className="h-4 w-4" />
+                  <span>Report Problem</span>
+                </Link>
+              </Button>
+            )}
+            
             <Button asChild variant="ghost">
               <Link to="/alerts" className="flex items-center space-x-2">
                 <Bell className="h-4 w-4" />
                 <span>Local Alerts</span>
               </Link>
             </Button>
+            
+            {isLoggedIn ? (
+              <Button variant="ghost" onClick={handleLogout} className="flex items-center space-x-2">
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost">
+                  <Link to="/auth" className="flex items-center space-x-2">
+                    <LogIn className="h-4 w-4" />
+                    <span>Login</span>
+                  </Link>
+                </Button>
+                <Button asChild variant="secondary">
+                  <Link to="/auth?tab=register" className="flex items-center space-x-2">
+                    <UserPlus className="h-4 w-4" />
+                    <span>Register</span>
+                  </Link>
+                </Button>
+              </>
+            )}
           </nav>
           
           <div className="md:hidden flex items-center">
@@ -71,18 +125,50 @@ const Navbar = () => {
               <span>Home</span>
             </Link>
           </Button>
-          <Button asChild variant="ghost" className="w-full justify-start">
-            <Link to="/report" className="flex items-center space-x-2">
-              <FileText className="h-4 w-4" />
-              <span>Report Problem</span>
-            </Link>
-          </Button>
+          
+          {isLoggedIn && (
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <Link to="/report" className="flex items-center space-x-2">
+                <FileText className="h-4 w-4" />
+                <span>Report Problem</span>
+              </Link>
+            </Button>
+          )}
+          
           <Button asChild variant="ghost" className="w-full justify-start">
             <Link to="/alerts" className="flex items-center space-x-2">
               <Bell className="h-4 w-4" />
               <span>Local Alerts</span>
             </Link>
           </Button>
+          
+          {isLoggedIn ? (
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start"
+              onClick={handleLogout}
+            >
+              <div className="flex items-center space-x-2">
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </div>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="ghost" className="w-full justify-start">
+                <Link to="/auth" className="flex items-center space-x-2">
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" className="w-full justify-start">
+                <Link to="/auth?tab=register" className="flex items-center space-x-2">
+                  <UserPlus className="h-4 w-4" />
+                  <span>Register</span>
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
