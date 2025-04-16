@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, AlertTriangle, Plus, Building, Droplet, Road, Trash2 } from "lucide-react";
+import { MapPin, Clock, AlertTriangle, Plus, Building, Droplet, Map as MapIcon, Trash2 } from "lucide-react";
 import { Problem } from "@/lib/types";
 import { getProblems } from "@/lib/mockData";
 import Map from "@/components/Map";
@@ -65,7 +65,7 @@ const HomePage = () => {
   const getCategoryIcon = (categoryId: string) => {
     switch (categoryId) {
       case "1":
-        return <Road className="h-4 w-4 mr-2" />;
+        return <MapIcon className="h-4 w-4 mr-2" />;
       case "2":
         return <Trash2 className="h-4 w-4 mr-2" />;
       case "3":

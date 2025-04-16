@@ -1,7 +1,5 @@
-
 import { useEffect, useRef } from "react";
 import { Problem } from "@/lib/types";
-import { MapPin } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
